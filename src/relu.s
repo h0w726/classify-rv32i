@@ -28,8 +28,27 @@ relu:
     li t1, 0             
 
 loop_start:
-    # TODO: Add your own implementation
-
+    bge t1, a1, loop_end  # If i >= length, exit loop
+    
+    # Calculate current address
+    slli t2, t1, 2        # t2 = i * 4 (byte offset)
+    add t2, a0, t2        # t2 = base + offset
+    
+    # Load value
+    lw t3, 0(t2)          # t3 = array[i]
+    
+    # Check if value is negative
+    bge t3, zero, skip  # If value >= 0, skip update
+    
+    # If negative, replace with 0
+    li t4,0
+    sw t4, 0(t2)        # array[i] = 0
+    
+skip:
+    addi t1, t1, 1        # i++
+    j loop_start
+loop_end:
+    jr ra                 # Return
 error:
     li a0, 36          
     j exit          

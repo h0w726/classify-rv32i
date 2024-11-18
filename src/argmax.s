@@ -25,13 +25,23 @@ argmax:
     li t6, 1
     blt a1, t6, handle_error
 
-    lw t0, 0(a0)
-
+    lw t0,0(a0)
     li t1, 0
     li t2, 1
 loop_start:
     # TODO: Add your own implementation
-
+    bge t2,a1,done
+    lw t3,4(a0)
+    bge t0,t3,skip
+    mv t0,t3
+    mv t1,t2
+skip:
+    addi a0,a0,4
+    addi t2,t2,1
+    j loop_start
+done:
+    mv a0,t1
+    jr ra
 handle_error:
     li a0, 36
     j exit
